@@ -1,0 +1,44 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/google-analytics": "^2.4.0",
+    "nuxt": "^3.7.3",
+    "sass": "^1.68.0"
+  },
+  "dependencies": {
+    "@nuxtjs/sanity": "^1.8.1",
+    "@sanity/client": "^6.4.12",
+    "@sanity/image-url": "^1.0.2",
+    "@studio-freight/lenis": "^1.0.27",
+    "@vueuse/components": "^10.5.0",
+    "@vueuse/core": "^10.5.0",
+    "axios": "^1.6.7",
+    "fast-random": "^2.0.4",
+    "glslify-loader": "^2.0.0",
+    "gsap": "^3.12.2",
+    "hammerjs": "^2.0.8",
+    "lodash": "^4.17.21",
+    "mobile-detect": "^1.4.5",
+    "postprocessing": "6.34.1",
+    "raw-loader": "^4.0.2",
+    "sass-loader": "^13.3.2",
+    "snifferjs": "^4.1.0",
+    "stats.js": "^0.17.0",
+    "three": "^0.156.1",
+    "tiny-emitter": "^2.1.0",
+    "troika-three-text": "^0.48.1",
+    "virtual-scroll": "^2.2.1",
+    "vite-plugin-glsl": "^1.1.2",
+    "vue3-touch-events": "^4.1.8"
+  }
+}

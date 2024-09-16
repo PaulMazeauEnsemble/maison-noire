@@ -1,0 +1,39 @@
+
+// Utils
+@mixin absolute-full() {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@mixin absolute-center() {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin hidden(){
+  opacity: 0;
+  visibility: hidden;
+}
+
+@mixin visible(){
+  opacity: 1;
+  visibility: visible;
+}
+
+// Responsive
+@mixin mobile {
+  @media (max-width: #{$mobile-breakpoint}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$mobile-breakpoint + 1px}) {
+    @content;
+  }
+}

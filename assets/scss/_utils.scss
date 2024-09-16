@@ -1,0 +1,13 @@
+@import "mixins";
+
+.hide-on-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+.hide-on-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}

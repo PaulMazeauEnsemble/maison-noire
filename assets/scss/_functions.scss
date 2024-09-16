@@ -1,0 +1,10 @@
+
+
+@function desktop-vw($pixels, $base-vw: 1680) {
+    @return math.div($pixels * 100vw, $base-vw);
+}
+  
+@function mobile-vw($pixels, $base-vw: 390) {
+    @return math.div($pixels * 100vw, $base-vw);
+}
+  

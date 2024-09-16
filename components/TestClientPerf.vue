@@ -87,25 +87,6 @@ onMounted(() => {
 
   vs.setLimit(-scrollHeight + wHeight / 2, wHeight * .25)
 
-  videos.value.forEach((el, elIndex) => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!el.src) {
-            el.addEventListener('canplay', () => {
-              console.log("canplay", elIndex)
-            }, { once: true })
-            el.src = el.dataset.src
-          }
-          el.play().catch(console.error)
-        } else {
-          el.pause()
-        }
-      })
-    }, { threshold: 0.1 })
-    observer.observe(el)
-  })
-
 })
 
 </script>

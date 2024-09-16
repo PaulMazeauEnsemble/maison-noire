@@ -73,12 +73,17 @@ export default class PlaneVideo extends PlaneImage {
   }
 
   // core
-  play() {
-    if (!this.hasBeenLoaded() && !this.isLazyLoading) {
-      if (this.texture.image.src) {
+  play(){
+
+    if(!this.texture.image.paused) return;
+
+    if(!this.hasBeenLoaded() && !this.isLazyLoading){
+
+      // not lazy
+      if(this.texture.image.src){
         this.setSize()
         this.plane.material.uniforms.uLazyLoaded.value = 1
-        this.texture.image.play().catch(console.error)
+        this.texture.image.play()
       } else {
         this.isLazyLoading = true
         this.load(() => {
@@ -88,24 +93,14 @@ export default class PlaneVideo extends PlaneImage {
         })
       }
     } else {
-      this.texture.image.play().catch(console.error)
+      this.texture.image.play()
     }
+
   }
 
   pause(){
     if(this.texture.image.paused) return;
     this.texture.image.pause()
-  }
-
-  update() {
-    this.cameraViewProjectionMatrix.multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse)
-    this.frustum.setFromProjectionMatrix(this.cameraViewProjectionMatrix)
-
-    if (this.frustum.intersectsObject(this.plane)) {
-      this.play()
-    } else {
-      this.pause()
-    }
   }
 
 }

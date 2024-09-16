@@ -102,30 +102,31 @@ const createGridStyle = ({random, isMobile = false} = {}) => {
 
   gridStyle.value = styles
 }
-const handleListVideo = (clientIndex, batchIndex) => {
+const handleListVideo = (clientIndex, batchIndex, play) => {
+  
   const id = `${clientIndex}-${batchIndex}`
   const videos = gridVideos.value[id]
 
-  if (!videos) return;
+  // allow client with no media
+  if(!videos) return;
 
   videos.forEach(el => {
-    if (!el.intersectionObserver) {
-      el.intersectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (!el.src) {
-              handleVideoLoader(el, () => {
-                el.parentElement.classList.add('loaded')
-              })
-              el.src = isMobile() ? (el.dataset.srcLow || el.dataset.src) : el.dataset.src
-            }
-            el.play().catch(console.error)
-          } else {
-            el.pause()
-          }
+    if(play){
+
+      // load
+      if(!el.src){
+        handleVideoLoader(el, () => {
+          el.parentElement.classList.add('loaded')
         })
-      }, { threshold: 0.1 })
-      el.intersectionObserver.observe(el)
+
+        el.src = isMobile() ? el.dataset.srcLow ? el.dataset.srcLow : el.dataset.src : el.dataset.src
+      }
+
+      el.currentTime = 0
+      el.play()
+
+    } else {
+      el.pause()
     }
   })
 }
@@ -133,21 +134,27 @@ const handleListVideo = (clientIndex, batchIndex) => {
 // hook
 
 watch(() => props.state, state => {
+
   const batchIndex = props.batchIndexes[props.index].findIndex(v => v)
-  if (state === 'entered' || state === 'leaving') {
-    handleListVideo(props.index, batchIndex)
+  
+  if(state === 'entered'){
+    handleListVideo(props.index, batchIndex, true)
+  } else if(state === 'leaving'){
+    handleListVideo(props.index, batchIndex, false)
   }
 })
 
 watch(() => props.index, (next, prev) => {
-  handleListVideo(next, props.batchIndexes[next].findIndex(v => v))
-  handleListVideo(prev, props.batchIndexes[prev].findIndex(v => v))
+  handleListVideo(next, props.batchIndexes[next].findIndex(v => v), true)
+  handleListVideo(prev, props.batchIndexes[prev].findIndex(v => v), false)
 })
 
 watch(() => props.batchIndexes, (next, prev) => {
-  handleListVideo(props.index, next[props.index].findIndex(v => v))
-  handleListVideo(props.index, prev[props.index].findIndex(v => v))
+
+  handleListVideo(props.index, next[props.index].findIndex(v => v), true)
+  handleListVideo(props.index, prev[props.index].findIndex(v => v), false)
 })
+
 
 onMounted(() => {
 

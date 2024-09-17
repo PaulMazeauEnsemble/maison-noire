@@ -32,6 +32,7 @@
 
     <div class="header__nav">
       <button :title="`nav ${item.label}`" :class="{current: item.value === currentLink}" v-for="item in nav" :key="item.value" v-show="menuNavShow" @click="() => handleClickLink(item.to, item.index)">{{ item.label }}</button>
+      <button title="ENG">Anglais</button>
     </div>
 
     <!-- Titles -->

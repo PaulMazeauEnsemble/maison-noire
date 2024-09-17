@@ -22,13 +22,13 @@
           :data-col="gridStyle[cIndex][bIndex][mIndex].gridColumn" 
           :data-row="gridStyle[cIndex][bIndex][mIndex].gridRow"
           :data-portait="media.is_portrait ? 'true' : 'false'"
-          @click="handleMediaClick(cIndex, bIndex, mIndex)"
+          @click="handleVideoClick(cIndex, bIndex, mIndex, media)"
           :class="{ selected: selectedMedia.clientIndex === cIndex && selectedMedia.batchIndex === bIndex && selectedMedia.mediaIndex === mIndex }"
         >
           <div class="slider__client-grid-media-element" style="pointer-events: all;">
             <div class="slider__client-grid-media-element-loader"></div>
             <img v-if="media.is_image" :src="getOptimizedUrl(media.asset, {width: 800})" alt="">
-            <video v-else ref="video" playsInline :data-src="media.video" :data-src-low="media.video_low" :data-id="`${cIndex}-${bIndex}`" loop muted @click="handleVideoClick(media)"></video>
+            <video v-else ref="video" playsInline :data-src="media.video" :data-src-low="media.video_low" :data-id="`${cIndex}-${bIndex}`" loop muted></video>
           </div>
         </div>
       </div>
@@ -136,21 +136,18 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
   })
 }
 
-// handle media click
-const handleMediaClick = (clientIndex, batchIndex, mediaIndex) => {
-  console.log('Media clicked:', clientIndex, batchIndex, mediaIndex)
+const handleVideoClick = (clientIndex, batchIndex, mediaIndex, media) => {
   selectedMedia.value = { clientIndex, batchIndex, mediaIndex }
-}
-
-// handle video click
-const handleVideoClick = (media) => {
-  fullscreenVideo.value = { ...media }
+  if (!media.is_image) {
+    fullscreenVideo.value = { ...media }
+  }
 }
 
 // close fullscreen video
 const closeFullscreenVideo = () => {
   fullscreenVideo.value = null
 }
+
 
 // hook
 

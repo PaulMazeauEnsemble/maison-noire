@@ -22,7 +22,7 @@
           :data-col="gridStyle[cIndex][bIndex][mIndex].gridColumn" 
           :data-row="gridStyle[cIndex][bIndex][mIndex].gridRow"
           :data-portait="media.is_portrait ? 'true' : 'false'"
-          @click="handleVideoClick(cIndex, bIndex, mIndex, media)"
+          @click="handleVideoClick(media, cIndex, bIndex, mIndex)"
           :class="{ selected: selectedMedia.clientIndex === cIndex && selectedMedia.batchIndex === bIndex && selectedMedia.mediaIndex === mIndex }"
         >
           <div class="slider__client-grid-media-element" style="pointer-events: all;">
@@ -35,12 +35,7 @@
     </div>
   </div>
 
-  <!-- Fullscreen Video -->
-  <transition name="fullscreen-video-transition">
-    <div v-if="fullscreenVideo" class="fullscreen-video" @click="closeFullscreenVideo">
-      <video :key="fullscreenVideo.video" :src="fullscreenVideo.video" autoplay></video>
-    </div>
-  </transition>
+
 </template>
 
 <script setup>
@@ -61,7 +56,6 @@ const el = ref(null)
 const grids = ref(null)
 const ua = useUA()
 const selectedMedia = ref({ clientIndex: null, batchIndex: null, mediaIndex: null })
-const fullscreenVideo = ref(null)
 
 const gridVideos = computed(() => {
   let obj = {}
@@ -136,16 +130,8 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
   })
 }
 
-const handleVideoClick = (clientIndex, batchIndex, mediaIndex, media) => {
-  selectedMedia.value = { clientIndex, batchIndex, mediaIndex }
-  if (!media.is_image) {
-    fullscreenVideo.value = { ...media }
-  }
-}
-
-// close fullscreen video
-const closeFullscreenVideo = () => {
-  fullscreenVideo.value = null
+const handleVideoClick = (media, cIndex, bIndex, mIndex) => {
+  console.log('click', media, cIndex, bIndex, mIndex)
 }
 
 
@@ -162,13 +148,13 @@ watch(() => props.state, state => {
   }
 })
 
+//Ancienne watch
 watch(() => props.index, (next, prev) => {
   handleListVideo(next, props.batchIndexes[next].findIndex(v => v), true)
   handleListVideo(prev, props.batchIndexes[prev].findIndex(v => v), false)
 })
 
 watch(() => props.batchIndexes, (next, prev) => {
-
   handleListVideo(props.index, next[props.index].findIndex(v => v), true)
   handleListVideo(props.index, prev[props.index].findIndex(v => v), false)
 })
@@ -308,35 +294,6 @@ onMounted(() => {
         gap: mobile-vw(20);
       }
     }
-  }
-}
-
-.fullscreen-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  cursor: pointer;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-
-  &-enter-active, &-leave-active {
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-
-  &-enter, &-leave-to {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  video {
-    max-width: 90%;
-    max-height: 90%;
   }
 }
 </style>

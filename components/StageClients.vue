@@ -276,6 +276,9 @@ onUnmounted(() => {
     overflow: hidden;
     height: var(--100sh);
     pointer-events: none;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 
     // &:before{
     //   content: "";

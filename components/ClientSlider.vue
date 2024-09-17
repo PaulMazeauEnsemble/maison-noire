@@ -22,16 +22,25 @@
           :data-col="gridStyle[cIndex][bIndex][mIndex].gridColumn" 
           :data-row="gridStyle[cIndex][bIndex][mIndex].gridRow"
           :data-portait="media.is_portrait ? 'true' : 'false'"
+          @click="handleMediaClick(cIndex, bIndex, mIndex)"
+          :class="{ selected: selectedMedia.clientIndex === cIndex && selectedMedia.batchIndex === bIndex && selectedMedia.mediaIndex === mIndex }"
         >
-          <div class="slider__client-grid-media-element">
+          <div class="slider__client-grid-media-element" style="pointer-events: all;">
             <div class="slider__client-grid-media-element-loader"></div>
             <img v-if="media.is_image" :src="getOptimizedUrl(media.asset, {width: 800})" alt="">
-            <video v-else ref="video" playsInline :data-src="media.video" :data-src-low="media.video_low" :data-id="`${cIndex}-${bIndex}`" loop muted></video>
+            <video v-else ref="video" playsInline :data-src="media.video" :data-src-low="media.video_low" :data-id="`${cIndex}-${bIndex}`" loop muted @click="handleVideoClick(media)"></video>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Fullscreen Video -->
+  <transition name="fullscreen-video-transition">
+    <div v-if="fullscreenVideo" class="fullscreen-video" @click="closeFullscreenVideo">
+      <video :key="fullscreenVideo.video" :src="fullscreenVideo.video" autoplay></video>
+    </div>
+  </transition>
 </template>
 
 <script setup>
@@ -51,10 +60,11 @@ const gridStyle = ref(null)
 const el = ref(null)
 const grids = ref(null)
 const ua = useUA()
+const selectedMedia = ref({ clientIndex: null, batchIndex: null, mediaIndex: null })
+const fullscreenVideo = ref(null)
+
 const gridVideos = computed(() => {
   let obj = {}
-
-  // console.log("computing")
 
   if(grids.value){
     grids.value.forEach(el => {
@@ -83,18 +93,15 @@ const createGridStyle = ({random, isMobile = false} = {}) => {
         force.isTop = !lastPosition.params.isTop
       }
       
-      // console.log("====> build: one")
       lastPosition = oneImagePositions({fs: random, isMobile, force, images: list})
       return lastPosition.style
     } 
     else if(count === 2){
-      // console.log("====> build: two")
       lastPosition = twoImagesPositions({fs: random, isMobile, images: list})
       return lastPosition.style
     }
     else {
       console.warn("COUNT IS WEIRD")
-      // console.log("====> build: other")
       lastPosition = twoImagesPositions({fs: random, isMobile, images: list})
       return lastPosition.style
     }
@@ -107,13 +114,11 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
   const id = `${clientIndex}-${batchIndex}`
   const videos = gridVideos.value[id]
 
-  // allow client with no media
   if(!videos) return;
 
   videos.forEach(el => {
     if(play){
 
-      // load
       if(!el.src){
         handleVideoLoader(el, () => {
           el.parentElement.classList.add('loaded')
@@ -129,6 +134,22 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
       el.pause()
     }
   })
+}
+
+// handle media click
+const handleMediaClick = (clientIndex, batchIndex, mediaIndex) => {
+  console.log('Media clicked:', clientIndex, batchIndex, mediaIndex)
+  selectedMedia.value = { clientIndex, batchIndex, mediaIndex }
+}
+
+// handle video click
+const handleVideoClick = (media) => {
+  fullscreenVideo.value = { ...media }
+}
+
+// close fullscreen video
+const closeFullscreenVideo = () => {
+  fullscreenVideo.value = null
 }
 
 // hook
@@ -178,6 +199,9 @@ onMounted(() => {
   z-index: 1;
   pointer-events: none;
 
+  .slider__client-grid-media {
+    pointer-events: all;
+  }
 
   @keyframes media-in {
     from{visibility: hidden; opacity: 0; transform: scale(0.95);}
@@ -242,7 +266,7 @@ onMounted(() => {
           height: auto;
           display: block;
           position: relative;
-
+          pointer-events: all;
 
           &-loader{
 
@@ -287,6 +311,35 @@ onMounted(() => {
         gap: mobile-vw(20);
       }
     }
+  }
+}
+
+.fullscreen-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  &-enter-active, &-leave-active {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  &-enter, &-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  video {
+    max-width: 90%;
+    max-height: 90%;
   }
 }
 </style>

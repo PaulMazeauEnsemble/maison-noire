@@ -13,7 +13,7 @@ export default defineConfig({
   title: 'Maison noire',
 
   projectId: 'q6ujozhq',
-  dataset: 'production',
+  dataset: 'development',
 
   plugins: [
     deskTool(),

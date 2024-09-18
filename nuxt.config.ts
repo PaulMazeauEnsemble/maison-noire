@@ -90,6 +90,7 @@ export default defineNuxtConfig({
   },
   sanity: {
     projectId: "q6ujozhq",
+    dataset: "development",
     apiVersion: "2023-10-10",
   },
   plugins: [

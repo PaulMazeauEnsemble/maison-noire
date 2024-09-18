@@ -1,4 +1,3 @@
-
 export default {
   name: 'about',
   type: 'document',
@@ -17,7 +16,6 @@ export default {
     {name: 'group8', title: "Emplacement"},
   ],
   fields: [
-
     {
       type: 'array',
       name: 'blocs',

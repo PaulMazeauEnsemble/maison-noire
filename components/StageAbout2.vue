@@ -211,6 +211,7 @@ const onSmoothWheel = () => {
 }
 
 onMounted(() => {
+  console.log('StageAbout2 mounted')
   vs = new SmoothWheel()
   vs.on("raf", onWheelLerped)
   vs.on("wheel", onSmoothWheel)

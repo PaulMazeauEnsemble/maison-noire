@@ -227,7 +227,7 @@ const handleNextBatch = () => {
 
 // hooks
 onMounted(() => {
-
+  console.log('StageClients mounted')
   vs = new SmoothWheel()
   vs.on("raf", onWheelLerped)
   vs.on("wheel", onSmoothWheel)

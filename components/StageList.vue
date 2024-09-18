@@ -5,9 +5,30 @@
 
     <div ref="list" class="stages__list">
       <div ref="listInner" class="stages__list-inner">
-        <StageClients :active="isInHtml && stageHtmlIndex === 0" @back-webgl="handlePrev" @next-html="stageHtmlIndex += 1" />
-        <StageAbout2 :active="isInHtml && stageHtmlIndex === 1" @back-html="stageHtmlIndex -= 1" @next-html="stageHtmlIndex += 1" />
-        <StageContact :active="isInHtml && stageHtmlIndex === 2" @back-html="stageHtmlIndex -= 1" @next-html="stageHtmlIndex += 1" />
+        <Suspense>
+          <template #default>
+            <StageClients :active="isInHtml && stageHtmlIndex === 0" @back-webgl="handlePrev" @next-html="stageHtmlIndex += 1" ref="target"/>
+          </template>
+          <template #fallback>
+            <div>Chargement...</div>
+          </template>
+        </Suspense>
+        <Suspense>
+          <template #default>
+            <StageAbout2 :active="isInHtml && stageHtmlIndex === 1" @back-html="stageHtmlIndex -= 1" @next-html="stageHtmlIndex += 1" />
+          </template>
+          <template #fallback>
+            <div>Chargement...</div>
+          </template>
+        </Suspense>
+        <Suspense>
+          <template #default>
+            <StageContact :active="isInHtml && stageHtmlIndex === 2" @back-html="stageHtmlIndex -= 1" @next-html="stageHtmlIndex += 1" />
+          </template>
+          <template #fallback>
+            <div>Loading...</div>
+          </template>
+        </Suspense>
       </div>
     </div>
 
@@ -15,11 +36,17 @@
 </template>
 
 <script setup>
+import { defineAsyncComponent, ref, onMounted, watch } from 'vue'
 import gsap from "gsap"
 import emitter from "tiny-emitter/instance"
 import { STAGE_HTML_PREV } from "~/assets/js/utils/events"
-import { useIsInHtml } from "~/composables/stages"
+import { useIsInHtml, useStageHtmlIndex } from "~/composables/stages"
+import { useIntersectionObserver } from '@vueuse/core'
 
+// Charger les composants de manière asynchrone
+const StageClients = defineAsyncComponent(() => import('./StageClients.vue'))
+const StageAbout2 = defineAsyncComponent(() => import('./StageAbout2.vue'))
+const StageContact = defineAsyncComponent(() => import('./StageContact.vue'))
 
 // states
 const isInHtml = useIsInHtml()
@@ -29,7 +56,19 @@ const mask = ref(null)
 const list = ref(null)
 const listInner = ref(null)
 
+const target = ref(null)
+const targetIsVisible = ref(false)
+
 // methods
+
+const { stop } = useIntersectionObserver(
+  target,
+  ([{ isIntersecting }], observerElement) => {
+    targetIsVisible.value = isIntersecting
+    console.log("targetIsVisible", targetIsVisible.value)
+  },
+)
+
 const handlePrev = () => {
   emitter.emit(STAGE_HTML_PREV)
 }
@@ -87,6 +126,10 @@ onMounted(() => {
   gsap.set(list.value, {background: 'none'})
 
   window.gsap = gsap
+})
+
+onUnmounted(() => {
+  stop() // Arrêter l'observateur lorsque le composant est démonté
 })
 watch([isInHtml, stageHtmlIndex], ([nextHtml, nextIndex], [prevHtml, prevIndex]) => {
 

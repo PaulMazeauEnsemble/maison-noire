@@ -54,6 +54,10 @@ const onLeaving = () => {
   lenisParameters.value.stopLenis()
 }
 
+onMounted(() => {
+  console.log('StageContact mounted')
+})
+
 useStageBehaviors({props, root, mask, content, onEntered, onLeaving})
 
 </script>

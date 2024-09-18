@@ -32,7 +32,7 @@
 
     <div class="header__nav">
       <button :title="`nav ${item.label}`" :class="{current: item.value === currentLink}" v-for="item in nav" :key="item.value" v-show="menuNavShow" @click="() => handleClickLink(item.to, item.index)">{{ item.label }}</button>
-      <button title="ENG">Anglais</button>
+      <button @click="toggleLanguage">{{ currentLanguage === 'fr' ? 'Switch to English' : 'Passer en Français' }}</button>
     </div>
 
     <!-- Titles -->
@@ -65,6 +65,11 @@ const nav = [
 const currentLink = ref(nav[0].value)
 const menuNavShow = ref(true)
 const activeTitle = ref('manifeste')
+const currentLanguage = ref('fr')
+
+const toggleLanguage = () => {
+  currentLanguage.value = currentLanguage.value === 'fr' ? 'en' : 'fr'
+}
 
 // others
 const handleMenu = () => {

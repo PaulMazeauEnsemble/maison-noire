@@ -30,21 +30,21 @@ export default class CameraControls {
     this.eventTarget.addEventListener("mousemove", this.onMouseMove)
   }
 
-  update(stage){
-    this.mouse.lerped.lerp(this.mouse.last, this.mouse.smooth)
-    if(stage){
-
-      stage.camera.position.x = -this.mouse.lerped.x * 5e-1
-      stage.camera.position.y = this.mouse.lerped.y * 2e-1
-
-      if(stage.cameraTarget){
-        stage.camera.lookAt(stage.cameraTarget)
+  update(stage) {
+    this.mouse.lerped.lerp(this.mouse.last, this.mouse.smooth);
+    if (stage) {
+      // Limiter les mises à jour de la caméra
+      if (Math.abs(this.mouse.lerped.x - this.mouse.last.x) > 0.01 || Math.abs(this.mouse.lerped.y - this.mouse.last.y) > 0.01) {
+        stage.camera.position.x = -this.mouse.lerped.x * 0.5;
+        stage.camera.position.y = this.mouse.lerped.y * 0.2;
+  
+        if (stage.cameraTarget) {
+          stage.camera.lookAt(stage.cameraTarget);
+        }
+  
+        stage.camera.rotation.y = -this.mouse.lerped.x * 0.05;
+        stage.camera.rotation.x = -this.mouse.lerped.y * 0.05;
       }
-
-      stage.camera.rotation.y = -this.mouse.lerped.x * 0.05
-      stage.camera.rotation.x = -this.mouse.lerped.y * 0.05
-      // stage.quad.material.uniforms.uControlsOffset.value[0] = this.mouse.lerped.x
-      // stage.quad.material.uniforms.uControlsOffset.value[1] = this.mouse.lerped.y
     }
   }
 

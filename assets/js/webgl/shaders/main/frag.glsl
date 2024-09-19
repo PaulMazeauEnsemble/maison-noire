@@ -14,7 +14,7 @@ uniform float uDpr;
 varying vec2 vUv;
 
 #define PI 3.14
-const highp float NOISE_GRANULARITY = 0.5/255.0;
+const lowp float NOISE_GRANULARITY = 0.5/255.0;
 
 #include /utils/map.glsl;
 #include /utils/shape.glsl;
@@ -22,14 +22,14 @@ const highp float NOISE_GRANULARITY = 0.5/255.0;
 // Helpers
 
 vec2 scale_uv(vec2 uv, float scale){
-     return uv = (uv - 0.5) * (1. / scale) + 0.5;
+     return (uv - 0.5) * (1. / scale) + 0.5;
 }
 
 float circularOut(float t) {
   return sqrt((2.0 - t) * t);
 }
 
-highp float random(highp vec2 coords) {
+lowp float random(lowp vec2 coords) {
    return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
@@ -102,7 +102,6 @@ vec4 handle_menu(){
     gradient_dist /= gradient_length;
     gradient_dist += (uMenuProgress - 1.0) * -1.5;
 
-    // vec3 gradient = vec3(gradient_dist);
     vec3 gradient = mix(MENU_LIGHT, MENU_DARK, gradient_dist);
     
     output_menu.rgb = gradient;

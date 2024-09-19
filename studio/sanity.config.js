@@ -2,7 +2,8 @@ import {defineConfig} from 'sanity'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {colorInput} from '@sanity/color-input'
-import {structureTool} from 'sanity/structure' 
+import {structureTool} from 'sanity/structure'
+import {documentInternationalization} from '@sanity/document-internationalization'
 
 const singletonActions = new Set(["publish", "discardChanges", "restore"])
 const singletonTypes = new Set(["settings", "manifeste", "client_list", 'contact', 'about'])
@@ -17,7 +18,15 @@ export default defineConfig({
   plugins: [
     structureTool(),
     visionTool(),
-    colorInput()
+    colorInput(),
+    documentInternationalization({
+      supportedLanguages: [
+        {id: 'fr', title: 'Francais'},
+        {id: 'en', title: 'English'}
+      ],
+      schemaTypes: ['manifeste', 'contact', 'about'],
+      languageField: `language`
+    })
   ],
 
   schema: {

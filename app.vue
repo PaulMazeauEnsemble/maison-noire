@@ -213,13 +213,16 @@ provide('isAppPaused', isAppPaused)
 const updateContent = async (lang) => {
   // Re-fetch or update content based on the new language
   const { data: dataManifeste } = await useSanityQuery(groq`*[_type == "manifeste" && language == $lang][0]`, { lang })
-  // ... update other data similarly ...
+  const { data: dataContact } = await useSanityQuery(groq`*[_type == "contact" && language == $lang][0]`, { lang })
+  const { data: dataAbout } = await useSanityQuery(groq`*[_type == "about" && language == $lang][0]`, { lang })
+  
+  console.log("dataManifeste", dataManifeste.value)
+
   cms.value = {
     ...cms.value,
     manifeste: dataManifeste.value,
     contact: dataContact.value,
     about: dataAbout.value,
-    // ... update other data ...
   }
 }
 

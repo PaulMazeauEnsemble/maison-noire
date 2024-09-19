@@ -9,8 +9,10 @@ export const useLanguage = () => {
 
   const toggleLanguage = () => {
     currentLanguage.value = currentLanguage.value === 'fr' ? 'en' : 'fr'
-    router.push({ query: { ...route.query, lang: currentLanguage.value } })
-    emitter.emit('language-changed', currentLanguage.value)
+    router.push({ query: { ...route.query, lang: currentLanguage.value } }).then(() => {
+      emitter.emit('language-changed', currentLanguage.value)
+      window.location.reload() // Ajout du reload ici
+    })
   }
 
   watch(() => route.query.lang, (newLang) => {

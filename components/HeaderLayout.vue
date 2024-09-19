@@ -33,7 +33,7 @@
     <div class="header__nav">
       <button :title="`nav ${item.label}`" :class="{current: item.value === currentLink}" v-for="item in nav" :key="item.value" v-show="menuNavShow" @click="() => handleClickLink(item.to, item.index)">{{ item.label }}</button>
       <button @click="toggleLanguage">
-    {{ currentLanguage === 'fr' ? 'ENG' : 'FR' }}
+        {{ currentLanguage === 'fr' ? 'ENG' : 'FR' }}
       </button>    
     </div>
 
@@ -45,14 +45,13 @@
 </template>
 
 <script setup>
+import { ref, watch, computed } from 'vue'
 import emitter from "tiny-emitter/instance"
 import { MENU_CLICK } from "~/assets/js/utils/events"
 import singleton from "~/assets/js/utils/singleton"
 import { useLanguage } from '~/composables/useLanguage'
 
-
 // state
-// const router = useRouter()
 const headerBlack = useHeaderBlack()
 const stageHtmlIndex = useStageHtmlIndex()
 const isInHtml = useIsInHtml()
@@ -60,18 +59,29 @@ const menuOpened = useMenuOpened()
 const root = ref(null)
 const loaderHasAnimated = useLoaderHasAnimated()
 const loaderCompleted = useLoaderCompleted()
-const nav = [
-  {label: 'Philosophie', value: 'manifeste', to: 'webgl'},
-  {label: 'Références', value: 'clients', to: 'html', index: 0},
-  {label: 'Notre Maison', value: 'about', to: 'html', index: 1},
-  {label: 'Contact', value: 'contact', to: 'html', index: 2},
-]
-const currentLink = ref(nav[0].value)
-const menuNavShow = ref(true)
-const activeTitle = ref('manifeste')
-
 const { currentLanguage, toggleLanguage } = useLanguage()
 
+const nav = computed(() => {
+  if (currentLanguage.value === 'fr') {
+    return [
+      { label: 'Philosophie', value: 'manifeste', to: 'webgl' },
+      { label: 'Références', value: 'clients', to: 'html', index: 0 },
+      { label: 'Notre Maison', value: 'about', to: 'html', index: 1 },
+      { label: 'Contact', value: 'contact', to: 'html', index: 2 },
+    ]
+  } else {
+    return [
+      { label: 'Philosophy', value: 'manifeste', to: 'webgl' },
+      { label: 'References', value: 'clients', to: 'html', index: 0 },
+      { label: 'Our House', value: 'about', to: 'html', index: 1 },
+      { label: 'Contact', value: 'contact', to: 'html', index: 2 },
+    ]
+  }
+})
+
+const currentLink = ref(nav.value[0].value)
+const menuNavShow = ref(true)
+const activeTitle = ref('manifeste')
 
 // others
 const handleMenu = () => {
@@ -91,11 +101,9 @@ const fromHtml2Webgl = () => {
 }
 
 const handleClickLink = (to, index) => {
-
   const fromWebgl = singleton.webgl.isCurrentWebglStage()
 
   if(to === "html"){
-    // exit webgl
     if(fromWebgl){
       const index = singleton.webgl.navigation.index
       const countTillHtmlStage = singleton.webgl.navigation.list.length - index - 1
@@ -107,25 +115,21 @@ const handleClickLink = (to, index) => {
 
     stageHtmlIndex.value = index
     handleMenu()
-  }
-
-  else if(to === "webgl" && !fromWebgl){
+  } else if(to === "webgl" && !fromWebgl){
     fromHtml2Webgl()
   }
-
-
 }
+
 const updateCurrentLink = () => {
   if(!isInHtml.value){
-    currentLink.value = nav[0].value
+    currentLink.value = nav.value[0].value
   } else {
-    currentLink.value = nav[stageHtmlIndex.value + 1].value
+    currentLink.value = nav.value[stageHtmlIndex.value + 1].value
   }
 }
 
 let handlingLogo = false
 const handleLogo = () => {
-
   if(singleton.webgl.isCurrentWebglStage() || handlingLogo) return;
 
   handlingLogo = true
@@ -139,23 +143,21 @@ const handleLogo = () => {
         menuNavShow.value = true
         handlingLogo = false
       }, 1.5 * 1000)
-    }, 1.5 * 1000) // duration of menu opening
+    }, 1.5 * 1000)
   } else {
     fromHtml2Webgl()
     setTimeout(() => {handlingLogo = false}, 1.5 * 1000)
   }
-
 }
 
 // hooks
 watch([stageHtmlIndex, isInHtml], () => {
   if(isInHtml.value){
-    activeTitle.value = nav[stageHtmlIndex.value + 1].value
+    activeTitle.value = nav.value[stageHtmlIndex.value + 1].value
   } else {
-    activeTitle.value = nav[0].value
+    activeTitle.value = nav.value[0].value
   }
 })
-
 </script>
 
 <style lang="scss" scoped>

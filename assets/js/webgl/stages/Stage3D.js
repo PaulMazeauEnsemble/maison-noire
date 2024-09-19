@@ -98,46 +98,39 @@ export default class Stage3D extends Stage {
   }
 
   handleLazyLoadVideos(){
-
-    let arr = this.sceneElements
-    for(let i = 0; i < arr.length; i++){
-      if(arr[i].userData.element && arr[i].userData.element.isPlaneVideo){
-        const opacity = arr[i].userData.getOpacity()
-        if(opacity > 0){
-          arr[i].userData.element.play()
+    let arr = this.sceneElements;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].userData.element && arr[i].userData.element.isPlaneVideo) {
+        const opacity = arr[i].userData.getOpacity();
+        if (opacity > 0) {
+          arr[i].userData.element.play();
         } else {
-          arr[i].userData.element.pause()
+          arr[i].userData.element.pause();
         }
-
       }
     }
   }
 
   handleMeshesVisibility(){
-    
-    // return;
+    let arr = this.sceneElements;
 
-    let arr = this.sceneElements
+    for (let i = 0; i < arr.length; i++) {
+      let child = arr[i];
+      if (child.isMesh) {
+        const camera2ChildZ = child.position.z - this.camera.position.z;
+        const near = child.userData.near ? child.userData.near : this.visibilityOptions.tooClose;
+        const nearLength = child.userData.nearLength ? child.userData.nearLength : this.visibilityOptions.nearFogLength;
 
-    for(let i = 0; i < arr.length; i++){
-      let child = arr[i]
-      if(child.isMesh){
-        const camera2ChildZ = child.position.z - this.camera.position.z
-        const near = child.userData.near ? child.userData.near : this.visibilityOptions.tooClose
-        const nearLength = child.userData.nearLength ? child.userData.nearLength : this.visibilityOptions.nearFogLength
-
-        if(camera2ChildZ < this.visibilityOptions.tooFar){
-          child.userData.setOpacity(0)
-        } 
-        else if(camera2ChildZ < near){
-          child.userData.setOpacity(THREE.MathUtils.mapLinear(camera2ChildZ, this.visibilityOptions.tooFar, this.visibilityOptions.tooFar + this.visibilityOptions.farFogLength, 0, 1))
-          child.userData.setOpacity(THREE.MathUtils.clamp(child.userData.getOpacity(), 0, 1))
-        } 
-        else if(camera2ChildZ < 0) {
-          child.userData.setOpacity(THREE.MathUtils.mapLinear(camera2ChildZ, near, near + nearLength, 1, 0))
-          child.userData.setOpacity(THREE.MathUtils.clamp(child.userData.getOpacity(), 0, 1))
+        if (camera2ChildZ < this.visibilityOptions.tooFar) {
+          child.userData.setOpacity(0);
+        } else if (camera2ChildZ < near) {
+          child.userData.setOpacity(THREE.MathUtils.mapLinear(camera2ChildZ, this.visibilityOptions.tooFar, this.visibilityOptions.tooFar + this.visibilityOptions.farFogLength, 0, 1));
+          child.userData.setOpacity(THREE.MathUtils.clamp(child.userData.getOpacity(), 0, 1));
+        } else if (camera2ChildZ < 0) {
+          child.userData.setOpacity(THREE.MathUtils.mapLinear(camera2ChildZ, near, near + nearLength, 1, 0));
+          child.userData.setOpacity(THREE.MathUtils.clamp(child.userData.getOpacity(), 0, 1));
         } else {
-          child.userData.setOpacity(0)
+          child.userData.setOpacity(0);
         }
       }
     }

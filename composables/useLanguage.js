@@ -1,5 +1,6 @@
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import emitter from 'tiny-emitter/instance'
 
 export const useLanguage = () => {
   const route = useRoute()
@@ -9,11 +10,13 @@ export const useLanguage = () => {
   const toggleLanguage = () => {
     currentLanguage.value = currentLanguage.value === 'fr' ? 'en' : 'fr'
     router.push({ query: { ...route.query, lang: currentLanguage.value } })
+    emitter.emit('language-changed', currentLanguage.value)
   }
 
   watch(() => route.query.lang, (newLang) => {
     if (newLang) {
       currentLanguage.value = newLang
+      emitter.emit('language-changed', newLang)
     }
   })
 

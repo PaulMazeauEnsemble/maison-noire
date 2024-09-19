@@ -38,9 +38,6 @@ const props = defineProps(['active'])
 const emit = defineEmits(['back-webgl', 'next-html'])
 const isAppPaused = inject('isAppPaused')
 
-// debug
-console.log('Initial isAppPaused Clients value:', isAppPaused.value)
-
 // states
 const root = ref(null)
 const mask = ref(null)
@@ -77,14 +74,11 @@ let vs = null
 const { getOptimizedUrl } = useOptimizedImageUrl()
 
 watchEffect(() => {
-  console.log(`StageClients: isAppPaused is now ${isAppPaused.value}`)
   if (isAppPaused.value) {
-    console.log('StageClients: Stopping animations and scroll interactions')
     if (vs) {
       vs.stop()
     }
   } else {
-    console.log('StageClients: Resuming animations and scroll interactions')
     if (vs && props.active) {
       vs.start()
     }
@@ -227,7 +221,6 @@ const handleNextBatch = () => {
 
 // hooks
 onMounted(() => {
-  console.log('StageClients mounted')
   vs = new SmoothWheel()
   vs.on("raf", onWheelLerped)
   vs.on("wheel", onSmoothWheel)

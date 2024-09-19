@@ -60,7 +60,6 @@ import { vIntersectionObserver } from '@vueuse/components'
 const props = defineProps(['active'])
 const emit = defineEmits(["next-html"])
 const isAppPaused = inject('isAppPaused')
-console.log('Initial isAppPaused StageAboutvalue:', isAppPaused.value)
 
 // states
 const root = ref(null)

@@ -53,7 +53,6 @@ import { isMobile, approximate } from '~/assets/js/utils/utils'
 const props = defineProps(['active'])
 const emit = defineEmits(["next-html", "back-html"])
 const isAppPaused = inject('isAppPaused')
-console.log('Initial isAppPaused StageAbout2 value:', isAppPaused.value)
 // states
 const root = ref(null)
 const mask = ref(null)
@@ -99,14 +98,11 @@ const onLoadImage = ({target}) => {
 }
 
 watchEffect(() => {
-  console.log(`StageAbout2: isAppPaused is now ${isAppPaused.value}`)
   if (isAppPaused.value) {
-    console.log('StageAbout2: Stopping animations and scroll interactions')
     if (vs) {
       vs.stop()
     }
   } else {
-    console.log('StageAbout2: Resuming animations and scroll interactions')
     if (vs && props.active) {
       vs.start()
     }
@@ -211,7 +207,6 @@ const onSmoothWheel = () => {
 }
 
 onMounted(() => {
-  console.log('StageAbout2 mounted')
   vs = new SmoothWheel()
   vs.on("raf", onWheelLerped)
   vs.on("wheel", onSmoothWheel)

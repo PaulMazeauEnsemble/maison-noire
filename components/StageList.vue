@@ -26,7 +26,7 @@
             <StageContact :active="isInHtml && stageHtmlIndex === 2" @back-html="stageHtmlIndex -= 1" @next-html="stageHtmlIndex += 1" />
           </template>
           <template #fallback>
-            <div>Loading...</div>
+            <div>Chargement...</div>
           </template>
         </Suspense>
       </div>
@@ -60,12 +60,10 @@ const target = ref(null)
 const targetIsVisible = ref(false)
 
 // methods
-
 const { stop } = useIntersectionObserver(
   target,
   ([{ isIntersecting }], observerElement) => {
     targetIsVisible.value = isIntersecting
-    console.log("targetIsVisible", targetIsVisible.value)
   },
 )
 
@@ -131,6 +129,7 @@ onMounted(() => {
 onUnmounted(() => {
   stop() // Arrêter l'observateur lorsque le composant est démonté
 })
+
 watch([isInHtml, stageHtmlIndex], ([nextHtml, nextIndex], [prevHtml, prevIndex]) => {
 
   if(isInHtml.value){

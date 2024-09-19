@@ -23,7 +23,7 @@
   import { onMounted, onUnmounted, provide } from 'vue'
   import { useAppPause } from '~/composables/useAppPause'
   import gsap from "gsap"
-
+  import { useLanguage } from '~/composables/useLanguage'
   if(typeof window !== "undefined"){
     gsap.ticker.lagSmoothing(0)
   }
@@ -32,6 +32,8 @@
   const route = useRoute()
   const { getOptimizedUrl } = useOptimizedImageUrl()
   const { isAppPaused, pauseApp, resumeApp } = useAppPause()
+  const { currentLanguage } = useLanguage()
+
 
   // states
   const loaderCompleted = useLoaderCompleted()
@@ -104,7 +106,7 @@ onUnmounted(() => {
   // manifeste
   const textures = {}
   const videos = {}
-  const {data: dataManifeste} = await useSanityQuery(groq`*[_type == "manifeste"][0]{
+  const {data: dataManifeste} = await useSanityQuery(groq`*[_type == "manifeste" && language == $lang][0]{
     ...,
     scenes[]{
       ...,
@@ -120,8 +122,9 @@ onUnmounted(() => {
         }
       }
     }
-  }
-  `);
+  }`, { lang: currentLanguage })
+  console.log("dataManifeste", dataManifeste.value)
+
   dataManifeste.value.scenes.forEach((scene, sceneIndex) => {
 
     const isMobileBrowser = isBrowser() && isMobile()
@@ -178,17 +181,25 @@ onUnmounted(() => {
       }
   `)
 
-  const {data: dataContact} = await useSanityQuery(groq`*[_type == "contact"][0]`)
-  const {data: dataAbout} = await useSanityQuery(groq`*[_type == "about"][0]{
-    blocs[]{
+  const {data: dataContact} = await useSanityQuery(groq`*[_type == "contact" && language == $lang][0]`, { lang: currentLanguage })
+  const {data: dataAbout} = await useSanityQuery(groq`*[_type == "about" && language == $lang][0]{
+    ...,
+    scenes[]{
+      ...,
+      list[]{
         ...,
-        images[]{
-          ...,
-          asset->
+        select(mesh_type == "media" && media_type == "image") => {
+          "image": image.asset->
+        },
+        select(mesh_type == "media" && media_type == "video") => {
+          "video": {
+            "url": video
+          }
         }
-      },
+      }
     }
-  `)
+  }`, {lang: currentLanguage})
+  console.log("dataAbout", dataAbout.value)
 
 
   // cms

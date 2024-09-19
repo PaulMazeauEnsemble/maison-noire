@@ -32,7 +32,9 @@
 
     <div class="header__nav">
       <button :title="`nav ${item.label}`" :class="{current: item.value === currentLink}" v-for="item in nav" :key="item.value" v-show="menuNavShow" @click="() => handleClickLink(item.to, item.index)">{{ item.label }}</button>
-      <button @click="toggleLanguage">{{ currentLanguage === 'fr' ? 'Switch to English' : 'Passer en Français' }}</button>
+      <button @click="toggleLanguage">
+    {{ currentLanguage === 'fr' ? 'ENG' : 'FR' }}
+      </button>    
     </div>
 
     <!-- Titles -->
@@ -46,6 +48,8 @@
 import emitter from "tiny-emitter/instance"
 import { MENU_CLICK } from "~/assets/js/utils/events"
 import singleton from "~/assets/js/utils/singleton"
+import { useLanguage } from '~/composables/useLanguage'
+
 
 // state
 // const router = useRouter()
@@ -65,11 +69,9 @@ const nav = [
 const currentLink = ref(nav[0].value)
 const menuNavShow = ref(true)
 const activeTitle = ref('manifeste')
-const currentLanguage = ref('fr')
 
-const toggleLanguage = () => {
-  currentLanguage.value = currentLanguage.value === 'fr' ? 'en' : 'fr'
-}
+const { currentLanguage, toggleLanguage } = useLanguage()
+
 
 // others
 const handleMenu = () => {

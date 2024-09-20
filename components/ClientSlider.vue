@@ -38,7 +38,7 @@
   <!-- Fullscreen Video -->
   <transition name="fullscreen-video-transition">
     <div v-if="fullscreenVideo" class="fullscreen-video" @click="closeFullscreenVideo">
-      <video :key="fullscreenVideo.video" :src="fullscreenVideo.video" autoplay></video>
+      <video :key="fullscreenVideo.video" :src="fullscreenVideo.video" autoplay loop></video>
     </div>
   </transition>
 </template>

@@ -110,6 +110,7 @@ const createGridStyle = ({random, isMobile = false} = {}) => {
   gridStyle.value = styles
 }
 const handleListVideo = (clientIndex, batchIndex, play) => {
+  
   const id = `${clientIndex}-${batchIndex}`
   const videos = gridVideos.value[id]
 
@@ -117,26 +118,18 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
 
   videos.forEach(el => {
     if(play){
+
       if(!el.src){
         handleVideoLoader(el, () => {
           el.parentElement.classList.add('loaded')
-          console.log(`Vidéo basse qualité chargée pour le client ${clientIndex}`)
-          
-          // Load high quality after low quality
-          if (el.src !== el.dataset.src) {
-            const highQualityVideo = new Image()
-            highQualityVideo.src = el.dataset.src
-            highQualityVideo.onload = () => {
-              el.src = el.dataset.src
-              console.log(`Vidéo haute qualité chargée pour le client ${clientIndex}`)
-            }
-          }
         })
-        el.src = isMobile() ? el.dataset.srcLow || el.dataset.src : el.dataset.srcLow || el.dataset.src
+
+        el.src = isMobile() ? el.dataset.srcLow ? el.dataset.srcLow : el.dataset.src : el.dataset.src
       }
 
       el.currentTime = 0
       el.play()
+
     } else {
       el.pause()
     }

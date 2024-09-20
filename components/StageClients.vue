@@ -4,6 +4,7 @@
 
       <!-- Images -->
       <client-slider
+        :key="index"
         :clients="cms.clients.list"
         :index="index"
         :indexLeaving="indexLeaving"
@@ -24,6 +25,8 @@
       </div>
     </div>
   </div>
+
+
 </template>
 
 <script setup>

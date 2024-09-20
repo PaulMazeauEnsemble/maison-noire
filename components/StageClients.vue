@@ -300,7 +300,7 @@ onUnmounted(() => {
     }
 
     &-list{
-      margin-top: calc(50vh - #{desktop-vw(35 / 2)});
+      margin-top: calc(50vh - #{desktop-vw(math.div(35,2))});
 
       &-item{
         font-size: desktop-vw(58);
@@ -368,7 +368,7 @@ onUnmounted(() => {
 
     &__content{
       &-list{
-        margin-top: calc(0.5 * #{var(--100sh)} - #{mobile-vw(25 / 2)});
+        margin-top: calc(0.5 * #{var(--100sh)} - #{mobile-vw(math.div(25, 2))});
 
         &-item{
           font-size: mobile-vw(36);

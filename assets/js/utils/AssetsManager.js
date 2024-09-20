@@ -139,7 +139,7 @@ class AssetsManager {
     }
 
     async testVideoPlayability(videoSrc = '/test-video.mp4'){
-        console.log("----- testVideoPlayability ----")
+        // console.log("----- testVideoPlayability ----")
         return new Promise((resolve, reject) => {
             const video = document.createElement("video")
             video.muted = true
@@ -163,7 +163,7 @@ class AssetsManager {
                 console.log("can not play", err)
                 reject(false)
             }).finally(() => {
-                console.log("----- END: testVideoPlayability ----")
+                // console.log("----- END: testVideoPlayability ----")
             })
         })
     }
@@ -181,7 +181,7 @@ class AssetsManager {
         }
 
         if(this.shouldUseSafariFriendly()){
-            console.log("will use safariFriendly urls")
+            // console.log("will use safariFriendly urls")
         }
 
         if(typeof (route.query.browser) !== 'undefined'){

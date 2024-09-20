@@ -54,9 +54,6 @@ const onLeaving = () => {
   lenisParameters.value.stopLenis()
 }
 
-onMounted(() => {
-  console.log('StageContact mounted')
-})
 
 useStageBehaviors({props, root, mask, content, onEntered, onLeaving})
 
@@ -68,7 +65,7 @@ useStageBehaviors({props, root, mask, content, onEntered, onLeaving})
   font-size: desktop-vw(20);
   position: relative;
 
-  ::v-deep(.c-scroll-start, .c-scroll-end){
+  :deep(.c-scroll-start), :deep(.c-scroll-end){
     height: desktop-vw(270);
 
     @include mobile(){
@@ -80,48 +77,41 @@ useStageBehaviors({props, root, mask, content, onEntered, onLeaving})
     fill: #000;
   }
 
-  ::v-deep &__persons{
-    // margin-top: 11vh;
+  :deep(.contact__persons-item){
+    &:not(:last-child){
+      margin-bottom: desktop-vw(40);
+    }
 
-    &-item{
-
+    p{
       &:not(:last-child){
-        margin-bottom: desktop-vw(40);
+        margin-bottom: desktop-vw(6);
       }
 
-      p{
-
-        &:not(:last-child){
-          margin-bottom: desktop-vw(6);
-        }
-
-        a{
-          text-decoration: underline;
-        }
+      a{
+        text-decoration: underline;
       }
     }
   }
 
-  ::v-deep &__address{
+  :deep(.contact__address){
     margin: 0 auto;
     width: desktop-vw(400);
     margin-top: desktop-vw(80);
     white-space: pre-line;
   }
 
-  ::v-deep &__socials{
+  :deep(.contact__socials){
     margin-top: desktop-vw(40);
-
-    &-item{
-      text-decoration: underline;
-      display: block;
-      line-height: 1.16;
-    }
   }
 
-  ::v-deep &__site{
+  :deep(.contact__socials-item){
+    text-decoration: underline;
+    display: block;
+    line-height: 1.16;
+  }
+
+  :deep(.contact__site){
     margin-top: desktop-vw(40);
-    // padding-bottom: desktop-vw(80);
     color: #4D4D4D; 
     display: block;
   }
@@ -162,42 +152,33 @@ useStageBehaviors({props, root, mask, content, onEntered, onLeaving})
       height: mobile-vw(200);
     }
 
-    ::v-deep &__persons{
-      &-item{
+    :deep(.contact__persons-item){
+      &:not(:last-child){
+        margin-bottom: mobile-vw(40);
+      }
+      p{
         &:not(:last-child){
-          margin-bottom: mobile-vw(40);
-        }
-        p{
-          &:not(:last-child){
-            margin-bottom: mobile-vw(6);
-          }
+          margin-bottom: mobile-vw(6);
         }
       }
     }
 
-    ::v-deep &__address{
+    :deep(.contact__address){
       width: 90%;
       margin-top: mobile-vw(60);
     }
 
-    ::v-deep &__socials{
+    :deep(.contact__socials){
       margin-top: mobile-vw(20);
     }
 
-    ::v-deep &__site{
+    :deep(.contact__site){
       margin-top: mobile-vw(20);
       padding-bottom: mobile-vw(115);
     }
 
-    ::v-deep &__content{
-      &-body{
-        width: mobile-vw(315);
-      }
-    }
-
-    &__content{
-      &-body{
-      }
+    :deep(.contact__content-body){
+      width: mobile-vw(315);
     }
   }
 }

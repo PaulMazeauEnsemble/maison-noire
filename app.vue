@@ -85,18 +85,18 @@ onMounted(() => {
 
   if(queryConsole){
     const { browser, os, device, userAgent } = useNuxtApp()
-    console.log('browser', Object.values(browser).join('-'))
-    console.log('os', Object.values(os).join('-'))
+    // console.log('browser', Object.values(browser).join('-'))
+    // console.log('os', Object.values(os).join('-'))
   }
 
   AssetsManager.testVideoPlayability().then(() => {
-    console.log("success test")
+    // console.log("success test")
     shouldShowStarToPlay.value = false
     AssetsManager.load(toValue(assets), loaderProgress).then(() => {
       loaderCompleted.value = true
     })
   }).catch(() => {
-    console.log("failed test")
+    // console.log("failed test")
     shouldShowStarToPlay.value = true
   })
 
@@ -215,8 +215,6 @@ const updateContent = async (lang) => {
   const { data: dataManifeste } = await useSanityQuery(groq`*[_type == "manifeste" && language == $lang][0]`, { lang })
   const { data: dataContact } = await useSanityQuery(groq`*[_type == "contact" && language == $lang][0]`, { lang })
   const { data: dataAbout } = await useSanityQuery(groq`*[_type == "about" && language == $lang][0]`, { lang })
-  
-  console.log("dataManifeste", dataManifeste.value)
 
   cms.value = {
     ...cms.value,

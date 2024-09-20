@@ -139,7 +139,7 @@ const handleListVideo = (clientIndex, batchIndex, play) => {
 
 const handleVideoClick = (clientIndex, batchIndex, mediaIndex, media) => {
   selectedMedia.value = { clientIndex, batchIndex, mediaIndex }
-  console.log('click', media, clientIndex, batchIndex, mediaIndex)
+  // console.log('click', media, clientIndex, batchIndex, mediaIndex)
   if (!media.is_image) {
     fullscreenVideo.value = { ...media }
   }

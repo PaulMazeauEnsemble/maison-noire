@@ -2,6 +2,12 @@
 * Nuxt 3
 * [Sanity](https://www.sanity.io/manage/personal/project/q6ujozhq)
 
+### Run the project 
+npm i && npm run dev
+
+### Run the local sanity studio from project root
+cd ./studio
+npm i && sanity dev
 
 # Development shortcuts
 #### Jump out manifeste 3D

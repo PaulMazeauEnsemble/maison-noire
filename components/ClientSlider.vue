@@ -175,6 +175,18 @@ watch(() => props.index, (next, prev) => {
   })
 })
 
+watch(() => props.batchIndexes, (newBatchIndexes, oldBatchIndexes) => {
+  const currentBatchIndex = newBatchIndexes[props.index].findIndex(v => v)
+  const oldBatchIndex = oldBatchIndexes[props.index].findIndex(v => v)
+  
+  if (currentBatchIndex !== oldBatchIndex) {
+    handleListVideo(props.index, oldBatchIndex, false)
+    nextTick(() => {
+      handleListVideo(props.index, currentBatchIndex, true)
+    })
+  }
+}, { deep: true })
+
 onMounted(() => {
 
   createGridStyle({random: FastRandom(Date.now()), isMobile: isMobile()})

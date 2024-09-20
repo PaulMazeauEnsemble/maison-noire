@@ -24,7 +24,7 @@ export default defineNuxtConfig({
         { hid: 't-image', name: 'twitter:image', content: metas.preview },
       ],
       link: [
-        {rel: 'apple-touch-icon', sizes: '180x180', href: `${domain}/apple-touch.icon.png`},
+        {rel: 'apple-touch-icon', sizes: '180x180', href: `${domain}/apple-touch-icon.png`},
         {rel: 'icon', type: 'image/png', sizes: '32x32', href: `${domain}/favicon-32x32.png`},
         {rel: 'icon', type: 'image/png', sizes: '16x16', href: `${domain}/favicon-16x16.png`},
         {rel: 'manifest', href: `${domain}/site.webmanifest`},

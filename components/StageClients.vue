@@ -170,15 +170,24 @@ const onResize = () => {
 }
 
 const handleSliderDots = (clientIndex, batchIndex) => {
-
-clientIndexes.value = clientIndexes.value.map((batches, _clientIndex) => batches.map((val, _batchIndex) => {
-  if(clientIndex === _clientIndex){
-    return batchIndex === _batchIndex ? true : false
-  } else {
-    return val
-  }
-
-}))
+  clientIndexes.value = clientIndexes.value.map((batches, _clientIndex) => batches.map((val, _batchIndex) => {
+    if(clientIndex === _clientIndex){
+      return batchIndex === _batchIndex ? true : false
+    } else {
+      return val
+    }
+  }))
+  
+  // Ajoutez cette ligne pour mettre à jour l'état du slider
+  sliderState.value = 'entered'
+  
+  // Utilisez nextTick pour s'assurer que les changements sont appliqués avant d'initialiser les vidéos
+  nextTick(() => {
+    if (vs) {
+      vs.setLast(-offsetTopItems.value[clientIndex])
+      index.value = clientIndex
+    }
+  })
 }
 
 const handleJumpIndex = nextIndex => {

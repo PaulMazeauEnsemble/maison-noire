@@ -103,9 +103,13 @@ export default class Stage3D extends Stage {
       if (arr[i].userData.element && arr[i].userData.element.isPlaneVideo) {
         const opacity = arr[i].userData.getOpacity();
         if (opacity > 0) {
+          if (!arr[i].userData.element.video) {
+            arr[i].userData.element.video = videoPool.getVideo();
+          }
           arr[i].userData.element.play();
-        } else {
-          arr[i].userData.element.pause();
+        } else if (arr[i].userData.element.video) {
+          videoPool.releaseVideo(arr[i].userData.element.video);
+          arr[i].userData.element.video = null;
         }
       }
     }
@@ -192,3 +196,28 @@ export default class Stage3D extends Stage {
   }
 
 }
+
+class VideoPool {
+  constructor(maxSize = 5) {
+    this.pool = [];
+    this.maxSize = maxSize;
+  }
+
+  getVideo() {
+    if (this.pool.length < this.maxSize) {
+      const video = document.createElement('video');
+      this.pool.push(video);
+      return video;
+    }
+    return this.pool.shift();
+  }
+
+  releaseVideo(video) {
+    video.pause();
+    video.src = '';
+    video.load();
+    this.pool.push(video);
+  }
+}
+
+const videoPool = new VideoPool();

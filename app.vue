@@ -15,6 +15,16 @@
 </template>
 
 <script setup>
+import { defineAsyncComponent } from 'vue'
+
+const ScreenSize = defineAsyncComponent(() => import('./components/ScreenSize.vue'))
+const HeaderLayout = defineAsyncComponent(() => import('./components/HeaderLayout.vue'))
+const WebglCanvas = defineAsyncComponent(() => import('./components/WebglCanvas.vue'))
+const TheLoader = defineAsyncComponent(() => import('./components/TheLoader.vue'))
+const DomConsole = defineAsyncComponent(() => import('./components/DomConsole.vue'))
+const StageList = defineAsyncComponent(() => import('./components/StageList.vue'))
+const ClickToStart = defineAsyncComponent(() => import('./components/ClickToStart.vue'))
+
 import AssetsManager from "~/assets/js/utils/AssetsManager"
 import { withLoader } from "~/assets/js/utils/commons.js"
 import { isBrowser, isMobile } from "~/assets/js/utils/utils.js"

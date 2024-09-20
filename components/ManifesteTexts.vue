@@ -73,31 +73,21 @@ const handleHide = (index, animate = true) => {
   })
 }
 
-watch(manifestePortalProgress, (next, prev) => {
-
-  // console.log("p progress", next, manifesteIndex.value)
-
-  if(next > 0 && textVisibilities.value[manifesteIndex.value]){
-    handleHide(manifesteIndex.value)
-    // console.log("hide him", manifesteIndex.value, next)
-  } else if(prev !== 0 && next === 0 && !textVisibilities.value[manifesteIndex.value]){
-    // console.log("show it", manifesteIndex.value)
-    handleShow(manifesteIndex.value)
-  }
-})
-
-watch(manifesteIndex, (nextIndex, prevIndex) => {
-
-  // console.log("index", nextIndex)
-
-  if(textVisibilities.value[prevIndex]){
-    handleHide(prevIndex)
+watch([manifestePortalProgress, manifesteIndex], ([progress, index], [oldProgress, oldIndex]) => {
+  if (progress > 0 && textVisibilities.value[index]) {
+    handleHide(index)
+  } else if (oldProgress !== 0 && progress === 0 && !textVisibilities.value[index]) {
+    handleShow(index)
   }
 
-  if(!textVisibilities.value[nextIndex] && manifestePortalProgress.value <= 0){
-    // console.log("reachde next index without showing it", nextIndex)
-    handleShow(nextIndex)
-  }  
+  if (index !== oldIndex) {
+    if (textVisibilities.value[oldIndex]) {
+      handleHide(oldIndex)
+    }
+    if (!textVisibilities.value[index] && progress <= 0) {
+      handleShow(index)
+    }
+  }
 })
 
 watch(loaderCompleted, () => {

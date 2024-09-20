@@ -78,6 +78,10 @@ const itemStyle = ref(null)
 const images = ref([])
 
 // computed
+const centerPositions = computed(() => {
+  if (!refItems.value) return []
+  return refItems.value.map(el => el.offsetTop + el.offsetHeight / 2)
+})
 
 // others
 const builder = imageUrlBuilder(sanity.config)
@@ -110,36 +114,18 @@ watchEffect(() => {
 })
 
 const snapNearest = () => {
+  if (!props.active) return
 
+  const positiveScroll = Math.abs(scroll.value)
+  const nearest = centerPositions.value.reduce((prev, curr) => (
+    Math.abs(curr - positiveScroll) < Math.abs(prev - positiveScroll) ? curr : prev
+  ))
 
-    // not in the page anymore
-    if(!props.active) return;
+  index.value = centerPositions.value.findIndex(el => el === nearest)
 
-    const positiveScroll = Math.abs(scroll.value)
-    const offsetTops = refItems.value.map(el => el.offsetTop)
-    const offsetHeights = refItems.value.map(el => el.offsetHeight)
-    const centerPosition = offsetTops.map((t, tIndex) => t + offsetHeights[tIndex] / 2)
-
-    let nearest = 0
-
-    // find nearest
-    if(scroll.value > 0){
-      nearest = centerPosition[0]
-    } else {
-      nearest = centerPosition.reduce((prev, curr) => (
-        Math.abs(curr - positiveScroll) < Math.abs(prev - positiveScroll) ? curr : prev
-      ))
-    }
-
-    // set index
-    index.value = centerPosition.findIndex(el => el ===  nearest)
-    // console.log("snapNearest", index.value)
-
-    // snap
-    if(vs){
-      vs.setLast(-nearest)
-    }
-
+  if (vs) {
+    vs.setLast(-nearest)
+  }
 }
 const debounceSnapNearest = useDebounceFn(snapNearest, 350)
 

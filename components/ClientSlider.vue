@@ -159,33 +159,24 @@ const initializeVideos = () => {
 
 // hook
 
-watch(() => props.state, (state) => {
+const currentBatchIndex = computed(() => props.batchIndexes[props.index].findIndex(v => v))
+
+watch([() => props.state, () => props.index, currentBatchIndex], ([state, index, batchIndex], [oldState, oldIndex, oldBatchIndex]) => {
   if (state === 'entered') {
     initializeVideos()
   } else if (state === 'leaving') {
-    const batchIndex = props.batchIndexes[props.index].findIndex(v => v)
-    handleListVideo(props.index, batchIndex, false)
+    handleListVideo(index, batchIndex, false)
   }
-}, { immediate: true })
 
-watch(() => props.index, (next, prev) => {
-  handleListVideo(prev, props.batchIndexes[prev].findIndex(v => v), false)
-  nextTick(() => {
-    handleListVideo(next, props.batchIndexes[next].findIndex(v => v), true)
-  })
-})
-
-watch(() => props.batchIndexes, (newBatchIndexes, oldBatchIndexes) => {
-  const currentBatchIndex = newBatchIndexes[props.index].findIndex(v => v)
-  const oldBatchIndex = oldBatchIndexes[props.index].findIndex(v => v)
-  
-  if (currentBatchIndex !== oldBatchIndex) {
-    handleListVideo(props.index, oldBatchIndex, false)
+  if (index !== oldIndex || batchIndex !== oldBatchIndex) {
+    if (oldIndex !== undefined) {
+      handleListVideo(oldIndex, oldBatchIndex, false)
+    }
     nextTick(() => {
-      handleListVideo(props.index, currentBatchIndex, true)
+      handleListVideo(index, batchIndex, true)
     })
   }
-}, { deep: true })
+}, { immediate: true })
 
 onMounted(() => {
 

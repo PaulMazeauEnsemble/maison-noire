@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-  import { inject, watch, ref, onMounted, toValue } from 'vue'
+  import { inject, watch, ref, onMounted, toValue, watchEffect } from 'vue'
   import Webgl from "~/assets/js/webgl/Webgl"
   import singleton from "~/assets/js/utils/singleton"
 
@@ -43,6 +43,12 @@
 
   onMounted(() => {
     if (loaderCompleted.value) {
+      createWebgl()
+    }
+  })
+
+  watchEffect(() => {
+    if (loaderCompleted.value && !singleton.webgl) {
       createWebgl()
     }
   })

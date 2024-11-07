@@ -32,9 +32,16 @@
 
     <div class="header__nav">
       <button :title="`nav ${item.label}`" :class="{current: item.value === currentLink}" v-for="item in nav" :key="item.value" v-show="menuNavShow" @click="() => handleClickLink(item.to, item.index)">{{ item.label }}</button>
-      <button @click="toggleLanguage">
-        {{ currentLanguage === 'fr' ? 'ENG' : 'FR' }}
-      </button>    
+      
+      <div class="language-btn">
+        <button :class="{ 'inactive-language': currentLanguage === 'fr' }" @click="toggleLanguage('fr')">
+          Fr
+        </button>
+        <button :class="{ 'inactive-language': currentLanguage === 'en' }" @click="toggleLanguage('en')">
+          En
+        </button>
+      </div>
+
     </div>
 
     <!-- Titles -->
@@ -224,6 +231,11 @@ watch([stageHtmlIndex, isInHtml], () => {
     transition: var(--o1) 1s;
     transition-property: opacity, visibility;
 
+    & .language-btn {
+      display: flex;
+      gap: desktop-vw(10);
+    }
+
     button{
       display: block;
       font-weight: 500;
@@ -234,6 +246,11 @@ watch([stageHtmlIndex, isInHtml], () => {
       margin-bottom: desktop-vw(20);
 
       &.current{
+        opacity: 0.15;
+        pointer-events: none;
+      }
+
+      &.inactive-language {
         opacity: 0.15;
         pointer-events: none;
       }

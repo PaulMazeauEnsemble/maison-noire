@@ -1,4 +1,3 @@
-
 export default {
   name: 'contact',
   type: 'document',
@@ -7,6 +6,17 @@ export default {
     prepare: ({state}) => ({title: 'Page Contact'}),
   },
   fields: [
+    {
+      type: 'string',
+      name: 'language',
+      title: 'Language',
+      options: {
+        list: [
+          {title: 'Francais', value: 'fr'},
+          {title: 'English', value: 'en'}
+        ]
+      }
+    },
     {
       type: 'array',
       name: 'list',

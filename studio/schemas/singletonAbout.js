@@ -17,6 +17,17 @@ export default {
   ],
   fields: [
     {
+      type: 'string',
+      name: 'language',
+      title: 'Language',
+      options: {
+        list: [
+          {title: 'Francais', value: 'fr'},
+          {title: 'English', value: 'en'}
+        ]
+      }
+    },
+    {
       type: 'array',
       name: 'blocs',
       of: [{
